@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
-from app.views import SchoolLocationView
+from app.views import SchoolLocationsView
 
 urlpatterns = [
-    url(r'^school_locations/$', SchoolLocationView.as_view(), name='school_locations'),
+    url(r'^school_locations/$', SchoolLocationsView.as_view(), name='school_locations'),
 ]
