@@ -11,5 +11,4 @@ class SchoolLocationView(APIView):
     def get(self, request):
         school_set = School.objects.all()
         serializer = SchoolLocationSerializer(school_set, many=True)
-        print(serializer.data)
-        return Response({})
+        return Response(serializer.data)
