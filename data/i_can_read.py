@@ -78,8 +78,7 @@ def get_naplan():
 
         for line in lines:
             line = line.replace('\n', '')
-            line = line.split(',')    
-            print(line)   
+            line = line.split(',')                
             
             school = line[1]       
 
@@ -110,3 +109,22 @@ def get_naplan():
             }
 
     return naplan_out
+
+def get_second_language():
+    second_language_out = {}
+
+    with open('second_language.csv', 'r') as f:
+        lines = f.readlines()[1:]
+
+        for line in lines:
+            line = line.replace('\n', '')
+            line = line.split(',')                
+            
+            school = line[0]     
+            second_language = line[4]              
+
+            second_language_out[school] = {
+                'second_language': second_language
+            }
+
+    return second_language_out
