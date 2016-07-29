@@ -91,4 +91,5 @@ myenv/
 
 db.sqlite3
 .idea/
+.vscode/
 localonly/
