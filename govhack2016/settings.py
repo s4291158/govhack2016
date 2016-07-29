@@ -119,5 +119,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if envar.DEV:
+if not envar.DEV:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
