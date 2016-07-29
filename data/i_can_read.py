@@ -128,3 +128,35 @@ def get_second_language():
             }
 
     return second_language_out
+
+def get_disciplinary():
+    disciplinary_out = {}
+
+    with open('disciplinary.csv', 'r') as f:
+        lines = f.readlines()[1:]
+
+        for line in lines:
+            line = line.replace('\n', '')
+            line = line.split(',')     
+
+            school = line[1]
+
+            suspension_type = line[9]
+            num_of_incident = line[10]
+
+            if school in disciplinary_out:
+                disciplinary_out[school] = {
+                    suspension_type:{
+                        'num_of_incident': num_of_incident
+                    },
+                    **disciplinary_out[school],
+                } 
+            else:
+                disciplinary_out[school] = {
+                    suspension_type:{
+                        'num_of_incident': num_of_incident
+                    }
+                } 
+
+
+    return disciplinary_out
