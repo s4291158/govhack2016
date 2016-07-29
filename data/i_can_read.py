@@ -1,6 +1,5 @@
 import csv, json
 
-
 def get_subject_enrollment():
     subject_enrollment = {}
 
@@ -39,3 +38,34 @@ def get_subject_enrollment():
                 }
 
     return subject_enrollment
+
+
+def get_attendence():
+    attendence_out = {}
+
+    with open('attendence.csv', 'r') as f:
+        lines = f.readlines()[1:]
+        
+        for line in lines:
+            line = line.replace('\n', '')
+            line = line.split(',')            
+            
+            school = line[0]
+            year = line[2]
+            attendence = line[10]            
+
+            if school in attendence:
+                attendence_out[school] = {
+                    year:{
+                        'attendence_rate': attendence,
+                    },
+                    **attendence[school],
+                }
+            else:
+                attendence_out[school] = {
+                    year:{
+                        'attendence_rate': attendence,
+                    },
+                }
+
+    return attendence_out 
