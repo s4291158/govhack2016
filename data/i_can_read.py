@@ -69,3 +69,44 @@ def get_attendence():
                 }
 
     return attendence_out 
+
+def get_naplan():
+    naplan_out = {}
+
+    with open('naplan.csv', 'r') as f:
+        lines = f.readlines()[1:]
+
+        for line in lines:
+            line = line.replace('\n', '')
+            line = line.split(',')    
+            print(line)   
+            
+            school = line[1]       
+
+            year5_readingmean = line[12]
+            year5_writingmean = line[13]
+            year5_spellingmean = line[14]
+            year5_grammarmean = line[15]
+            year5_numeracymean = line[16]
+
+            year9_readingmean = line[22]
+            year9_writingmean = line[23]
+            year9_spellingmean = line[24]
+            year9_grammarmean = line[25]
+            year9_numeracymean = line[26]
+
+            naplan_out[school] = {
+                'year5_readingmean': year5_readingmean,
+                'year5_writingmean': year5_writingmean,
+                'year5_spellingmean': year5_spellingmean,
+                'year5_grammarmean': year5_grammarmean,
+                'year5_numeracymean': year5_numeracymean,
+
+                'year9_readingmean': year9_readingmean,
+                'year9_writingmean': year9_writingmean,
+                'year9_spellingmean': year9_spellingmean,
+                'year9_grammarmean': year9_grammarmean,
+                'year9_numeracymean': year9_numeracymean,
+            }
+
+    return naplan_out
