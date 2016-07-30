@@ -94,4 +94,7 @@ db.sqlite3
 .vscode/
 localonly/
 
+# SFTP
+ftp-simple.json
+
 */.~*
