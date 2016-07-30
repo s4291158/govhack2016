@@ -54,8 +54,9 @@ document.onreadystatechange = () => {
             console.log('ID: ', locations[i].id);
             openInfoWindow(locations[i].id);
         });
-    markers.push(marker);
-  }};
+        markers.push(marker);
+      }
+  };
   
   // promise to handle all setup
   Promise
@@ -86,12 +87,11 @@ document.onreadystatechange = () => {
 
   // on query search
   $("#searchButton").click((e) => {
-    queryText = $('#query').text();
+    queryText = $('#query').val();
     deleteAllMarkers();
     $.post('/', {"query": queryText}, (response) => {
-        var locations = data[0];
         try{
-            generateMarkers(locations);
+            generateMarkers(response);
         }catch(err){
         console.log(err);
         }

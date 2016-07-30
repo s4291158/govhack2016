@@ -12,9 +12,8 @@ from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
     SchoolInputSerializer, SchoolSerializer
 
-@csrf_exempt
-def index_view(request):
-    if request.method == "POST":
+class MainView(APIView):
+    def post(self, request):
         # TODO: Pass string through Jaimyn's thing
 
         # Filter by location
@@ -36,24 +35,25 @@ def index_view(request):
         if 'location' in keywords:
             # Filter by location
             lat_lng, lat_lng_bounds = query_place(keywords['location'])
-            formatted_bounds = {'lng1': lat_lng_bounds['northeast']['lng'], 'lng2': lat_lng_bounds['southwest']['lng'],
-                                'lat1': lat_lng_bounds['northeast']['lat'], 'lat2': lat_lng_bounds['southwest']['lat']}
+            formatted_bounds = {'lng1': lat_lng_bounds['southwest']['lng'], 'lng2': lat_lng_bounds['northeast']['lng'],
+                                'lat1': lat_lng_bounds['southwest']['lat'], 'lat2': lat_lng_bounds['northeast']['lat']}
 
             bounds_serializer = BoundsSerializer(data=formatted_bounds)
             bounds_serializer.is_valid(raise_exception=True)
             queryset = schools_within_bounds(bounds_serializer.validated_data)
 
         serializer = SchoolLocationsSerializer(queryset, many=True)
-        return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
+        return Response(data=serializer.data)#, headers={"Access-Control-Allow-Origin": '*'})
 
-    return render(request, 'index.html')
+    def get(self, request):
+        return render(request, 'index.html')
 
 
 class SchoolLocationsView(APIView):
     def get(self, request):
         school_set = School.objects.all()
         serializer = SchoolLocationsSerializer(school_set, many=True)
-        return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
+        return Response(data=serializer.data, headers={"Access-Control-Allow-Origin": '*'})
 
 class SchoolView(APIView):
     def get(self, request, school_id):
@@ -62,4 +62,4 @@ class SchoolView(APIView):
             serializer = SchoolSerializer(
                 input_serializer.validated_data['school']
             )
-            return Response(serializer.data)
+            return Response(data=serializer.data)

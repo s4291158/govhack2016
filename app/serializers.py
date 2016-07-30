@@ -8,7 +8,6 @@ from app.models import School, SubjectEnrollment, Attendence, Naplan, \
 class SchoolLocationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
-
         fields = ('id', 'name', 'lat', 'lng')
 
 
