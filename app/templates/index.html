@@ -1,0 +1,48 @@
+
+<script>window.initMap = function(){}</script>
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.min.js'></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3F23U8fVjGBEwcZ_xBlrg-kCxIu_cqAU&amp;callback=window.initMap"></script>
+<script src='https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js'></script>
+{% load staticfiles %}
+<script src="{% static "js/script.js" %}"></script>
+<link rel="stylesheet" type="text/css" href='https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css'></link>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
+<link rel="stylesheet" type="text/css" href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}"></link>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <div class="mdl-layout-icon"><i class="fa fa-institution">&nbsp;&nbsp;&nbsp;</i></div><span class="mdl-layout-title">Qschools</span>
+      <div id="menuButton" data-upgraded=",MaterialButton" class="wrapper mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">more_vert</i></div>
+      <!-- search-bar-->
+      <div id="searchBar">
+        <form action="#">
+          <div class="mdl-textfield mdl-js-textfield">
+            <label for="searchInput" class="mdl-textfield__label"> <i class="material-icons">search</i>
+              <Search></Search>
+            </label>
+            <input id="searchInput" class="mdl-textfield-input mdl-textfield__input"/>
+          </div>
+          <button id="searchButton" class="mdl-button mdl-js-button mdl-js-ripple-effect">Search</button>
+        </form>
+      </div>
+      <ul for="menuButton" class="mdl-menu mdl mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect">
+        <li class="mdl-menu__item">View saved schools</li>
+        <li class="mdl-menu__item">Compare schools</li>
+      </ul>
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+      <div id="map"></div>
+      <div id="info">
+        <div class="scrollWindow">
+          <h4>School Name Here</h4>
+          <hr/>
+          <p>Location goes here doodleedoo</p><img src=""/>
+        </div>
+        <button id="saveSchool" class="mdl-button mdl-js-button mdl-js-ripple-effect">Save to watchlist &nbsp;<i class="fa fa-square-o"></i></button>
+      </div>
+    </div>
+  </main>
+</div>

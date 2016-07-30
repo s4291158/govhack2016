@@ -10,9 +10,6 @@ class School(models.Model):
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
 
-    class Meta:
-        unique_together = ('lat', 'lng')
-
     def __str__(self):
         return self.name
 
@@ -36,7 +33,7 @@ class Attendence(models.Model):
     attendence_rate = models.CharField(max_length=40)
 
     def __str__(self):
-        return self.school
+        return str(self.school)
 
 
 class Naplan(models.Model):
@@ -55,7 +52,7 @@ class Naplan(models.Model):
     year9_numeracymean = models.IntegerField()
 
     def __str__(self):
-        return self.school
+        return str(self.school)
 
 
 class SecondLanguage(models.Model):
@@ -64,7 +61,7 @@ class SecondLanguage(models.Model):
     second_language = models.CharField(max_length=40)
 
     def __str__(self):
-        return self.school
+        return str(self.school)
 
 
 class Disciplinary(models.Model):

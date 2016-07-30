@@ -1,0 +1,77 @@
+.mdl-layout__header-row {
+  background-color: #FFC107;
+}
+
+.mdl-layout-title {
+  font-size: 1.5em;
+}
+
+#searchBar {
+  margin-left: 25px;
+  padding-left: 25px;
+}
+#searchBar #searchButton {
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  margin-left: 60px;
+  margin-top: -6px;
+}
+#searchBar #searchInput {
+  background-color: #FFECB3;
+  font-size: 1.5em;
+  box-shadow: 3px 2px 1px rgba(0, 0, 0, 0.25);
+  color: #212121;
+  background-color: white;
+  padding-left: 50px;
+}
+#searchBar i {
+  margin-left: 10px;
+  margin-top: 4px;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  position: absolute;
+  right: 16px;
+}
+
+.page-content {
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: calc(100vh - 56px);
+  background-color: gray;
+  -webkit-transision: all 2s;
+  transition: all 2s;
+  position: absolute;
+}
+
+#info {
+  width: 45%;
+  -webkit-transision: all 2s;
+  transition: all 2s;
+  position: absolute;
+  z-index: 100;
+  height: calc(100vh - 56px);
+  right: 0;
+  top: 0;
+  background: white;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+#saveSchool {
+  position: absolute;
+  background: #536DFE;
+  width: 100%;
+  color: #FFECB3;
+  bottom: 0;
+}
+
+.scrollWindow {
+  overflow: scroll;
+  height: 100%;
+  margin-left: 10px;
+}
