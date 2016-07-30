@@ -80,3 +80,4 @@ def schools_within_bounds(coords):
         models.Q(lng__lte=coords['lng2'])
     )
     return School.objects.filter(q)
+
