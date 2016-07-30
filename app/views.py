@@ -35,12 +35,25 @@ class MainView(APIView):
         if 'location' in keywords:
             # Filter by location
             lat_lng, lat_lng_bounds = query_place(keywords['location'])
-            formatted_bounds = {'lng1': lat_lng_bounds['southwest']['lng'], 'lng2': lat_lng_bounds['northeast']['lng'],
-                                'lat1': lat_lng_bounds['southwest']['lat'], 'lat2': lat_lng_bounds['northeast']['lat']}
+            formatted_bounds = {'lng1': lat_lng_bounds['southwest']['lng']-0.1, 'lng2': lat_lng_bounds['northeast']['lng']+0.1,
+                                'lat1': lat_lng_bounds['southwest']['lat']-0.1, 'lat2': lat_lng_bounds['northeast']['lat']+0.1}
 
             bounds_serializer = BoundsSerializer(data=formatted_bounds)
             bounds_serializer.is_valid(raise_exception=True)
             queryset = schools_within_bounds(bounds_serializer.validated_data)
+
+        if 'attendence' in keywords:
+            # filter attendence
+            school_ids = []
+            for q in queryset:
+                # If they have a high attendence rate
+                if 'good' in keywords['attendence']:
+                    if len(q.attendence_set.all().filter(attendence_rate__gte=90.0)) > 0:
+                        school_ids.append(q.id)
+                else:
+                    if len(q.attendence_set.all().filter(attendence_rate__lte=89.0)) > 0:
+                        school_ids.append(q.id)
+            queryset.objects.filter(id__in=school_ids)
 
         serializer = SchoolLocationsSerializer(queryset, many=True)
         return Response(data=serializer.data)#, headers={"Access-Control-Allow-Origin": '*'})
