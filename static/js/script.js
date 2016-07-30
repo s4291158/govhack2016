@@ -21,7 +21,7 @@ document.onreadystatechange = () => {
   function openInfoWindow(id) {
     $.post(BASE_URL + '/school', (school) => {
       currentSchool = school;
-        
+      $('#info').removeClass('closed');
     });
   }
   
