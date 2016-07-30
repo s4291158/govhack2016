@@ -1,12 +1,23 @@
 import googlemaps
 
+
 def query_place(place):
     gmaps = googlemaps.Client(key='AIzaSyAygZ1T2_ZBZ1UnJyv68BEL1riDsnQW_-w')
-    geocode_result = gmaps.geocode(place)[0]
 
-    postal_code = geocode_result['address_components'][-1]['long_name']
-    lat_lng = geocode_result['geometry']['location']
+    geocode_result = gmaps.places(place)
 
-    my_dict = {'postal': postal_code, **lat_lng}
+    lat_lng, lat_lng_bounds = None, None
 
-    return my_dict
+    try:
+        lat_lng = geocode_result['results'][0]['geometry']['location']
+    except Exception as e:
+        print(e)
+        pass
+
+    try:
+        lat_lng_bounds = geocode_result['results'][0]['geometry']['viewport']
+    except Exception as e:
+        print(e)
+        pass
+
+    return lat_lng, lat_lng_bounds

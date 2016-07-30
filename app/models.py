@@ -5,6 +5,7 @@ class School(models.Model):
     name = models.CharField(max_length=40, unique=True)
     postcode = models.IntegerField()
 
+
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
 

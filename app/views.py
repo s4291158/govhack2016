@@ -35,18 +35,19 @@ class SchoolLocationsView(APIView):
 
         # {'school': 'school', 'location': 'brisbane city', 'area': 'numeracy', 'attendance': 'good', 'suspension': 'short'}
         query_data = request.POST['query']
-        query_respond = get_the_query(query_data)
+        keywords = get_the_query(query_data)
 
-        # Focusing on area, location, and attendence
-        query_set = School.objects.all()
+        queryset = School.objects.all()
 
-        if 'location' in query_data:
+        if 'location' in keywords:
             # Filter by location
-            location_filter_data = {}
-            query_set.objects.filter()
+            lat_lng, lat_lng_bounds = query_place(keywords['location'])
+            formatted_bounds = {'lng1': lat_lng_bounds['northeast']['lng'], 'lng2': lat_lng_bounds['southwest']['lng'],
+                                'lat1': lat_lng_bounds['northeast']['lat'], 'lat2': lat_lng_bounds['southwest']['lat']}
 
-        input_serializer = BoundsSerializer(data=request.data)
-        input_serializer.is_valid(raise_exception=True)
-        school_set = schools_within_bounds(input_serializer.validated_data)
-        serializer = SchoolLocationsSerializer(school_set, many=True)
+            bounds_serializer = BoundsSerializer(data=formatted_bounds)
+            bounds_serializer.is_valid(raise_exception=True)
+            queryset = schools_within_bounds(bounds_serializer.validated_data)
+
+        serializer = SchoolLocationsSerializer(queryset, many=True)
         return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})

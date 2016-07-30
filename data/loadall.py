@@ -204,9 +204,8 @@ def load_long_lat():
     queryset = School.objects.all()
 
     for query in queryset:
-        ret = query_place(query.name.replace('_', ' '))
-        ret.pop('postal')
-        serializer = SchoolLocationsSerializer(instance=query, data=ret, partial=True)
+        lat_lng, lat_lng_bounds = query_place(query.name.replace('_', ' '))
+        serializer = SchoolLocationsSerializer(instance=query, data=lat_lng, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
