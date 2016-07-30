@@ -1,15 +1,15 @@
 document.onreadystatechange = () => {
-  let BASE_URL = 'http://qschools.online';
+  var BASE_URL = 'http://qschools.online';
   
-  let map;
-  let markers = [];
-  let savedSchools = [];
-  let currentSchool = 0;
+  var map;
+  var markers = [];
+  var savedSchools = [];
+  var currentSchool = 0;
   
-  let locationsRecieved = $.getJSON(BASE_URL + '/school_locations/?format=json');
-  let mapInitialized = new Promise((resolve, reject) => {
+  var locationsRecieved = $.getJSON(BASE_URL + '/school_locations/?format=json');
+  var mapInitialized = new Promise((resolve, reject) => {
     window.initMap = function() {
-      let mapDiv = $('#map')[0];
+      var mapDiv = $('#map')[0];
       map = new google.maps.Map(mapDiv, {
         center: {lat: -27.4698, lng: 153.0251},
         zoom: 8
@@ -27,14 +27,22 @@ document.onreadystatechange = () => {
       console.log(school);
     });
   }
-  
-  // promise to handle all setup
-  Promise
-    .all([locationsRecieved, mapInitialized])
-    .then((data) => {
-      let locations = data[0];
-      for(let i in locations){
-        let marker = new google.maps.Marker({
+
+  function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  }
+
+  function deleteAllMarkers(){
+    setMapOnAll(null);
+    markers = [];
+  }
+
+  generateMarkers = (data) => {
+    for(var i in data){
+        locations = data;
+        marker = new google.maps.Marker({
           position: {
             lat: locations[i].lat,
             lng: locations[i].lng
@@ -46,14 +54,21 @@ document.onreadystatechange = () => {
             console.log('ID: ', locations[i].id);
             openInfoWindow(locations[i].id);
         });
-        markers.push(marker);
-      }
+    markers.push(marker);
+  }};
+  
+  // promise to handle all setup
+  Promise
+    .all([locationsRecieved, mapInitialized])
+    .then((data) => {
+        var locations = data[0];
+        generateMarkers(locations);
     }).catch((err) => { console.log("Error: " + err); });
   
   // save for comparison button click handler
   $("#saveSchool").click((e) => {
     // if school already on list
-    let indxOf = savedSchools.indexOf(currentSchool);
+    var indxOf = savedSchools.indexOf(currentSchool);
     if(indxOf != -1){
       // remove it
       savedSchools.splice(indxOf, 1);
@@ -67,5 +82,19 @@ document.onreadystatechange = () => {
       // update data
       savedSchools.push(currentSchool);
     }
+  });
+
+  // on query search
+  $("#searchButton").click((e) => {
+    queryText = $('#query').text();
+    deleteAllMarkers();
+    $.post('/', {"query": queryText}, (response) => {
+        var locations = data[0];
+        try{
+            generateMarkers(locations);
+        }catch(err){
+        console.log(err);
+        }
+    })
   });
 };
