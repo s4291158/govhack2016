@@ -76,8 +76,16 @@
   overflow: scroll;
   height: 100%;
   margin-left: 25px;
+  display: block;
+  float: right;
 }
 
 .scrollWindow:before {
+  display: block;
+  float: left;
+  width: 25px;
+  text-align: center;
+  height: 100%;
+  margin: 0 auto;
   content: '||';
 }
