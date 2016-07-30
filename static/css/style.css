@@ -58,6 +58,21 @@
   top: 0;
   background: white;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+
+}
+
+#schoolLocation {
+  width: 75%;
+  display: block;
+  left: 0;
+  float: left;
+}
+
+#schoolImage {
+  width: 25%;
+  display: block;
+  right: 0;
+  float: right;
 }
 
 #info.closed {
