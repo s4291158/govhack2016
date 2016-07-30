@@ -1,6 +1,5 @@
 document.onreadystatechange = () => {
-  //let BASE_URL = 'https://qschools.online';
-  let BASE_URL = 'http://127.0.0.1:8000';
+  let BASE_URL = 'http://qschools.online';
   
   let map;
   let markers = [];
@@ -18,6 +17,13 @@ document.onreadystatechange = () => {
       resolve();
     }
   });
+
+  function openInfoWindow(id) {
+    $.post(BASE_URL + '/school', (school) => {
+      currentSchool = school;
+        
+    });
+  }
   
   // promise to handle all setup
   Promise
@@ -31,13 +37,11 @@ document.onreadystatechange = () => {
             lng: locations[i].lng
           },
           map: map,
-          //
           title: ("" + locations[i].name)
         });
-        /*
         marker.addEventListener('click', (e) => {
-            openInfoWindow(locations[i].)
-        })*/
+            openInfoWindow(locations[i].id)
+        })
         markers.push(marker);
       }
     }).catch((err) => { console.log("Error: " + err); });
@@ -60,7 +64,4 @@ document.onreadystatechange = () => {
       savedSchools.push(currentSchool);
     }
   });
-  
-  
-  
 };
