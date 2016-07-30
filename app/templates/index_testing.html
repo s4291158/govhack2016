@@ -1,0 +1,56 @@
+<head>
+  <title>Qschools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>window.initMap = function(){}</script>
+  <script type='text/javascript' src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+  <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3F23U8fVjGBEwcZ_xBlrg-kCxIu_cqAU&amp;callback=window.initMap"></script>
+  <script src="../../static/js/script.js"></script>
+  <link rel="stylesheet" type="text/css" href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'></link>
+  <link rel="stylesheet" type="text/css" href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css"></link>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          <i class="fa fa-institution"></i>
+          Qschools
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">View Wishlist</a></li>
+          <li><a href="#">Compare Schools</a></li>
+        </ul>
+
+        <div id="searchBar" class="col-sm-3 col-md-3">
+          <div class="navbar-form" role="search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+              <div class="input-group-btn">
+                <button id="searchButton" class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="map"></div>
+    <div id="info" class="offscreen">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+  </div>
+</body>
