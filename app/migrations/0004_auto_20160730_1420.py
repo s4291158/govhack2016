@@ -6,14 +6,9 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('app', '0003_auto_20160730_1019'),
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name='school',
-            unique_together=set([]),
-        ),
     ]

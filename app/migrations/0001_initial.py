@@ -7,7 +7,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -73,10 +72,6 @@ class Migration(migrations.Migration):
                 ('year_12_enroll', models.CharField(max_length=40)),
                 ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app.School')),
             ],
-        ),
-        migrations.AlterUniqueTogether(
-            name='school',
-            unique_together=set([('lat', 'lng')]),
         ),
         migrations.AddField(
             model_name='naplan',
