@@ -205,6 +205,7 @@ def load_long_lat():
 
     for query in queryset:
         lat_lng, lat_lng_bounds = query_place(query.name.replace('_', ' '))
+        print(query.name, lat_lng)
         serializer = SchoolLocationsSerializer(instance=query, data=lat_lng, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()

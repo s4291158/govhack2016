@@ -2,7 +2,7 @@ import googlemaps
 
 
 def query_place(place):
-    gmaps = googlemaps.Client(key='AIzaSyAygZ1T2_ZBZ1UnJyv68BEL1riDsnQW_-w')
+    gmaps = googlemaps.Client(key='AIzaSyC64CU6Y2yihOLW9IIJq_I7IHhLpf483Rc')
 
     geocode_result = gmaps.places(place)
 
@@ -17,7 +17,6 @@ def query_place(place):
     try:
         lat_lng_bounds = geocode_result['results'][0]['geometry']['viewport']
     except Exception as e:
-        print(e)
         pass
 
     return lat_lng, lat_lng_bounds
