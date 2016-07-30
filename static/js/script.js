@@ -1,6 +1,5 @@
 document.onreadystatechange = () => {
-  //let BASE_URL = 'https://qschools.online';
-  let BASE_URL = 'http://45.32.247.22';
+  let BASE_URL = 'http://qschools.online';
   
   let map;
   let markers = [];
@@ -18,13 +17,19 @@ document.onreadystatechange = () => {
       resolve();
     }
   });
+
+  function openInfoWindow(id) {
+    $.post(BASE_URL + '/school', (school) => {
+      currentSchool = school;
+        
+    });
+  }
   
   // promise to handle all setup
   Promise
     .all([locationsRecieved, mapInitialized])
     .then((data) => {
       let locations = data[0];
-      console.log(data);
       for(let i in locations){
         let marker = new google.maps.Marker({
           position: {
@@ -32,9 +37,11 @@ document.onreadystatechange = () => {
             lng: locations[i].lng
           },
           map: map,
-          title: ("" + locations[i].id)
+          title: ("" + locations[i].name)
         });
-        console.log(marker);
+        marker.addEventListener('click', (e) => {
+            openInfoWindow(locations[i].id)
+        })
         markers.push(marker);
       }
     }).catch((err) => { console.log("Error: " + err); });
@@ -57,7 +64,4 @@ document.onreadystatechange = () => {
       savedSchools.push(currentSchool);
     }
   });
-  
-  
-  
 };
