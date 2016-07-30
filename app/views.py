@@ -7,7 +7,8 @@ from app.gmaps import query_place
 from django.shortcuts import render
 
 from app.models import School, schools_within_bounds
-from app.serializers import SchoolLocationsSerializer, BoundsSerializer
+from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
+    SchoolInputSerializer, SchoolSerializer
 
 
 def index_view(request):
@@ -51,3 +52,13 @@ class SchoolLocationsView(APIView):
 
         serializer = SchoolLocationsSerializer(queryset, many=True)
         return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
+
+
+class SchoolView(APIView):
+    def get(self, request, school_id):
+        input_serializer = SchoolInputSerializer(data={'school': school_id})
+        if input_serializer.is_valid(raise_exception=True):
+            serializer = SchoolSerializer(
+                input_serializer.validated_data['school']
+            )
+            return Response(serializer.data)
