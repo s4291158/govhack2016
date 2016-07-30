@@ -35,8 +35,8 @@ class MainView(APIView):
         if 'location' in keywords:
             # Filter by location
             lat_lng, lat_lng_bounds = query_place(keywords['location'])
-            formatted_bounds = {'lng1': lat_lng_bounds['southwest']['lng']-0.1, 'lng2': lat_lng_bounds['northeast']['lng']+0.1,
-                                'lat1': lat_lng_bounds['southwest']['lat']-0.1, 'lat2': lat_lng_bounds['northeast']['lat']+0.1}
+            formatted_bounds = {'lng1': lat_lng_bounds['southwest']['lng']-0.01, 'lng2': lat_lng_bounds['northeast']['lng']+0.01,
+                                'lat1': lat_lng_bounds['southwest']['lat']-0.01, 'lat2': lat_lng_bounds['northeast']['lat']+0.01}
 
             bounds_serializer = BoundsSerializer(data=formatted_bounds)
             bounds_serializer.is_valid(raise_exception=True)
