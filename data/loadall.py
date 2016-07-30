@@ -13,6 +13,10 @@ def load_subject_enrollment():
             year_11_enroll = line[7]
             year_12_enroll = line[8]
 
+            # Loading takes too long
+            if '2016' not in year:
+                break
+
             if 'Y' in year_12_enroll:
                 year_12_enroll = 1
             elif 'N' in year_12_enroll:
@@ -50,14 +54,16 @@ def load_attendence():
             attendence = line[10]
 
 
-            _school = School.objects.filter(name__contains=school[0])[0]
+            _school = School.objects.filter(name__contains=school[0])
 
             if len(_school) <= 0:
                 continue
 
+            _school = _school[0]
+
             try:
                 Attendence.objects.get_or_create(school=_school, year=year, attendence_rate=attendence)
-                print('Created attendence: {}'.format(attendence))
+                print('Created attendence: {} for {}'.format(attendence, str(_school)))
             except Exception as e:
                 print(e)
                 print(attendence, year)
@@ -70,25 +76,26 @@ def load_naplan():
             break
 
         for line in csv.reader(f):
-
             school = line[1].lower().split(' ')
 
-            year5_readingmean = line[12]
-            year5_writingmean = line[13]
-            year5_spellingmean = line[14]
-            year5_grammarmean = line[15]
-            year5_numeracymean = line[16]
+            year5_readingmean = line[12].replace('--', '0').replace('*', '0')
+            year5_writingmean = line[13].replace('--', '0').replace('*', '0')
+            year5_spellingmean = line[14].replace('--', '0').replace('*', '0')
+            year5_grammarmean = line[15].replace('--', '0').replace('*', '0')
+            year5_numeracymean = line[16].replace('--', '0').replace('*', '0')
 
-            year9_readingmean = line[22]
-            year9_writingmean = line[23]
-            year9_spellingmean = line[24]
-            year9_grammarmean = line[25]
-            year9_numeracymean = line[26]
+            year9_readingmean = line[22].replace('--', '0').replace('*', '0')
+            year9_writingmean = line[23].replace('--', '0').replace('*', '0')
+            year9_spellingmean = line[24].replace('--', '0').replace('*', '0')
+            year9_grammarmean = line[25].replace('--', '0').replace('*', '0')
+            year9_numeracymean = line[26].replace('--', '0').replace('*', '0')
 
-            _school = School.objects.filter(name__contains=school[0])[0]
+            _school = School.objects.filter(name__contains=school[0])
 
             if len(_school) <= 0:
                 continue
+
+            _school = _school[0]
 
             try:
                 Naplan.objects.get_or_create(
@@ -105,7 +112,7 @@ def load_naplan():
                     year9_grammarmean= year9_grammarmean,
                     year9_numeracymean= year9_numeracymean
                 )
-                print('Made naplan')
+                print('Made naplan for {}'.format(str(_school)))
             except Exception as e:
                 print(e)
 
@@ -123,17 +130,19 @@ def load_second_language():
             school = line[0].lower().split()
             second_language = line[4]
 
-            _school = School.objects.filter(name__contains=school[0])[0]
+            _school = School.objects.filter(name__contains=school[0])
 
             if len(_school) <= 0:
                 continue
+
+            _school = _school[0]
 
             try:
                 SecondLanguage.objects.get_or_create(
                     school=_school,
                     second_language=second_language
                 )
-                print('Made second language {}'.format(second_language))
+                print('Made second language {} to {}'.format(second_language, str(_school)))
             except Exception as e:
                 print(e)
 
@@ -151,10 +160,12 @@ def load_disciplinary():
             suspension_type = line[9]
             num_of_incident = line[10]
 
-            _school = School.objects.filter(name__contains=school[0])[0]
+            _school = School.objects.filter(name__contains=school[0])
 
             if len(_school) <= 0:
                 continue
+
+            _school = _school[0]
 
             try:
                 Disciplinary.objects.get_or_create(
