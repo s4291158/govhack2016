@@ -8,9 +8,8 @@ from app.gmaps import query_place
 
 class SchoolLocationsView(APIView):
     def get(self, request):
-        school_set = School.objects.all()
-        serializer = SchoolLocationsSerializer(school_set, many=True)
-        return Response(serializer.data)
+        school = School.objects.order_by('?').first()
+        return Response(data=query_place(school.postcode))
 
     def post(self, request):
         # todo: pass through jaimyn's wit.ai thingy
