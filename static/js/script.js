@@ -19,9 +19,12 @@ document.onreadystatechange = () => {
   });
 
   function openInfoWindow(id) {
+    console.log('ID: ', id);
+    $('#info').removeClass('closed');
+
     $.post(BASE_URL + '/school', (school) => {
       currentSchool = school;
-      $('#info').removeClass('closed');
+      console.log(school);
     });
   }
   
@@ -40,8 +43,9 @@ document.onreadystatechange = () => {
           title: ("" + locations[i].name)
         });
         marker.addListener('click', (e) => {
-            openInfoWindow(locations[i].id)
-        })
+            console.log('ID: ', locations[i].id);
+            openInfoWindow(locations[i].id);
+        });
         markers.push(marker);
       }
     }).catch((err) => { console.log("Error: " + err); });

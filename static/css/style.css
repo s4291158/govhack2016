@@ -44,15 +44,13 @@
   width: 100%;
   height: calc(100vh - 56px);
   background-color: gray;
-  -webkit-transition: all 2s;
-  transition: all 2s;
   position: absolute;
 }
 
 #info {
   width: 45%;
-  -webkit-transition: all 2s;
-  transition: all 2s;
+  -webkit-transition: all 1s;
+  transition: all 1s;
   position: absolute;
   z-index: 100;
   height: calc(100vh - 56px);
@@ -77,5 +75,9 @@
 .scrollWindow {
   overflow: scroll;
   height: 100%;
-  margin-left: 10px;
+  margin-left: 25px;
+}
+
+.scrollWindow:before {
+  content: '||';
 }
