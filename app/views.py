@@ -28,6 +28,7 @@ class SchoolLocationsView(APIView):
         # lon2 = lon + 0.01
 
         # Filter by types
+        # Filter by
 
         input_serializer = BoundsSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
