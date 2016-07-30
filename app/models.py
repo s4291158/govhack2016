@@ -1,7 +1,5 @@
 from django.db import models
 
-from app.gmaps import query_place
-
 
 class School(models.Model):
     name = models.CharField(max_length=40, unique=True)

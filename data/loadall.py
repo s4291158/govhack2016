@@ -1,9 +1,20 @@
 import csv
 import time
+
+from app.gmaps import query_place
 from app.models import *
+from app.models import School
+from app.serializers import SchoolLocationsSerializer
 
-def load_subject_enrollment():
 
+def check_short_load(model, short):
+    if short and model.objects.all().count() > 100:
+        return True
+    else:
+        return False
+
+
+def load_subject_enrollment(short=False):
     with open('./data/subject_enrollment.csv', 'rU') as f:
         for line in csv.reader(f):
             year = line[0]
@@ -42,7 +53,11 @@ def load_subject_enrollment():
                 print(e)
                 print(subject_name, year_11_enroll, year_12_enroll)
 
-def load_attendence():
+            if check_short_load(SubjectEnrollment, short):
+                break
+
+
+def load_attendence(short=False):
     with open('./data/attendence.csv', 'r') as f:
         for line in csv.reader(f):
             break
@@ -52,7 +67,6 @@ def load_attendence():
             school = line[0].lower().split(' ')
             year = line[2]
             attendence = line[10].replace('%', '')
-
 
             _school = School.objects.filter(name__contains=school[0])
 
@@ -70,7 +84,11 @@ def load_attendence():
 
             time.sleep(0.0001)
 
-def load_naplan():
+            if check_short_load(Attendence, short):
+                break
+
+
+def load_naplan(short=False):
     with open('./data/naplan.csv', 'r') as f:
         for line in csv.reader(f):
             break
@@ -100,27 +118,27 @@ def load_naplan():
             try:
                 Naplan.objects.get_or_create(
                     school=_school,
-                    year5_readingmean= year5_readingmean,
-                    year5_writingmean= year5_writingmean,
-                    year5_spellingmean= year5_spellingmean,
-                    year5_grammarmean= year5_grammarmean,
-                    year5_numeracymean= year5_numeracymean,
+                    year5_readingmean=year5_readingmean,
+                    year5_writingmean=year5_writingmean,
+                    year5_spellingmean=year5_spellingmean,
+                    year5_grammarmean=year5_grammarmean,
+                    year5_numeracymean=year5_numeracymean,
 
-                    year9_readingmean= year9_readingmean,
-                    year9_writingmean= year9_writingmean,
-                    year9_spellingmean= year9_spellingmean,
-                    year9_grammarmean= year9_grammarmean,
-                    year9_numeracymean= year9_numeracymean
+                    year9_readingmean=year9_readingmean,
+                    year9_writingmean=year9_writingmean,
+                    year9_spellingmean=year9_spellingmean,
+                    year9_grammarmean=year9_grammarmean,
+                    year9_numeracymean=year9_numeracymean
                 )
                 print('Made naplan for {}'.format(str(_school)))
             except Exception as e:
                 print(e)
 
+            if check_short_load(Naplan, short):
+                break
 
 
-
-def load_second_language():
-
+def load_second_language(short=False):
     with open('./data/second_language.csv', 'r') as f:
         for line in csv.reader(f):
             break
@@ -146,10 +164,11 @@ def load_second_language():
             except Exception as e:
                 print(e)
 
+            if check_short_load(SecondLanguage, short):
+                break
 
 
-def load_disciplinary():
-
+def load_disciplinary(short=False):
     with open('./data/disciplinary.csv', 'r') as f:
         for line in csv.reader(f):
             break
@@ -177,12 +196,25 @@ def load_disciplinary():
             except Exception as e:
                 print(e)
 
+            if check_short_load(Disciplinary, short):
+                break
 
 
+def load_long_lat():
+    queryset = School.objects.all()
 
-def load_all():
-    load_subject_enrollment()
-    load_attendence()
-    load_naplan()
-    load_second_language()
-    load_disciplinary()
+    for query in queryset:
+        ret = query_place(query.postcode)
+        ret.pop('postal')
+        serializer = SchoolLocationsSerializer(instance=query, data=ret, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+
+def load_all(short=False):
+    load_subject_enrollment(short)
+    load_attendence(short)
+    load_naplan(short)
+    load_second_language(short)
+    load_disciplinary(short)
+    load_long_lat()
