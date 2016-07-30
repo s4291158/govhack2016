@@ -30,14 +30,45 @@ class BoundsSerializer(serializers.Serializer):
         return attrs
 
 
-class SchoolSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = School
-
-
 class SubjectEnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubjectEnrollment
+        exclude = ('id', 'school')
+
+
+class AttendenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendence
+        exclude = ('id', 'school')
+
+
+class NaplanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Naplan
+        exclude = ('id', 'school')
+
+
+class SecondLanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecondLanguage
+        exclude = ('id', 'school')
+
+
+class DisciplinarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Disciplinary
+        exclude = ('id', 'school')
+
+
+class SchoolSerializer(serializers.ModelSerializer):
+    subjectenrollment_set = SubjectEnrollmentSerializer(many=True)
+    attendence_set = AttendenceSerializer(many=True)
+    naplan_set = NaplanSerializer(many=True)
+    secondlanguage_set = SecondLanguageSerializer(many=True)
+    disciplinary_set = DisciplinarySerializer(many=True)
+
+    class Meta:
+        model = School
 
 
 class SchoolInputSerializer(serializers.Serializer):
@@ -45,8 +76,3 @@ class SchoolInputSerializer(serializers.Serializer):
         slug_field='id',
         queryset=School.objects.all(),
     )
-
-
-class SchoolDetailSerializer(serializers.Serializer):
-    school = SchoolSerializer()
-    subject_enrollment_set = SubjectEnrollmentSerializer(many=True)
