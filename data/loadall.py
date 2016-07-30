@@ -51,7 +51,7 @@ def load_attendence():
 
             school = line[0].lower().split(' ')
             year = line[2]
-            attendence = line[10]
+            attendence = line[10].replace('%', '')
 
 
             _school = School.objects.filter(name__contains=school[0])
@@ -62,7 +62,7 @@ def load_attendence():
             _school = _school[0]
 
             try:
-                Attendence.objects.get_or_create(school=_school, year=year, attendence_rate=attendence)
+                Attendence.objects.get_or_create(school=_school, year=year, attendence_rate=float(attendence))
                 print('Created attendence: {} for {}'.format(attendence, str(_school)))
             except Exception as e:
                 print(e)

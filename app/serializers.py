@@ -20,7 +20,7 @@ def load_long_lat():
 class SchoolLocationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
-        fields = ('id', 'lat', 'lng')
+        fields = ('id', 'name', 'lat', 'lng')
 
 
 class BoundsSerializer(serializers.Serializer):

@@ -30,7 +30,7 @@ class Attendence(models.Model):
     school = models.ForeignKey(School)
 
     year = models.IntegerField()
-    attendence_rate = models.CharField(max_length=40)
+    attendence_rate = models.FloatField()
 
     def __str__(self):
         return str(self.school)
