@@ -44,14 +44,14 @@
   width: 100%;
   height: calc(100vh - 56px);
   background-color: gray;
-  -webkit-transision: all 2s;
+  -webkit-transition: all 2s;
   transition: all 2s;
   position: absolute;
 }
 
 #info {
   width: 45%;
-  -webkit-transision: all 2s;
+  -webkit-transition: all 2s;
   transition: all 2s;
   position: absolute;
   z-index: 100;
@@ -60,6 +60,10 @@
   top: 0;
   background: white;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+#info.closed {
+  right: -45% !important;
 }
 
 #saveSchool {

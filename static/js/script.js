@@ -39,7 +39,7 @@ document.onreadystatechange = () => {
           map: map,
           title: ("" + locations[i].name)
         });
-        marker.addEventListener('click', (e) => {
+        marker.addListener('click', (e) => {
             openInfoWindow(locations[i].id)
         })
         markers.push(marker);
