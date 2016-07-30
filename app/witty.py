@@ -1,6 +1,7 @@
 from wit import Wit
+from localonly.envar import WIT_ACCESS_TOKEN
 
-access_token = "RAXWYKJVTV3EXND5FPFJOS7HTIRHL4GW"
+access_token = WIT_ACCESS_TOKEN
 min_confidence = 0.7 #on a scale of 0 = 0% to 1 = 100%
 
 witty = Wit(access_token=access_token)

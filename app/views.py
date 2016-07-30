@@ -1,3 +1,5 @@
+from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -10,18 +12,9 @@ from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
     SchoolInputSerializer, SchoolSerializer
 
-
+@csrf_exempt
 def index_view(request):
-    return render(request, 'index.html')
-
-
-class SchoolLocationsView(APIView):
-    def get(self, request):
-        school_set = School.objects.all()
-        serializer = SchoolLocationsSerializer(school_set, many=True)
-        return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
-
-    def post(self, request):
+    if request.method == "POST":
         # TODO: Pass string through Jaimyn's thing
 
         # Filter by location
@@ -53,6 +46,14 @@ class SchoolLocationsView(APIView):
         serializer = SchoolLocationsSerializer(queryset, many=True)
         return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
 
+    return render(request, 'index.html')
+
+
+class SchoolLocationsView(APIView):
+    def get(self, request):
+        school_set = School.objects.all()
+        serializer = SchoolLocationsSerializer(school_set, many=True)
+        return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
 
 class SchoolView(APIView):
     def get(self, request, school_id):
