@@ -92,7 +92,8 @@ $(() => {
     $.getJSON(BASE_URL + '/school/' + id,
               (school) => {
       currentSchool = school;
-      $("#info").removeClass("offscreen").text(JSON.stringify(school));
+      $("#info").removeClass("offscreen");
+      $('.wrapper').text(JSON.stringify(school));
     })
   }
 });
