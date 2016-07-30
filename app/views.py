@@ -8,14 +8,16 @@ from django.shortcuts import render
 from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer
 
+
 def index_view(request):
     return render(request, 'index.html')
+
 
 class SchoolLocationsView(APIView):
     def get(self, request):
         school_set = School.objects.all()
         serializer = SchoolLocationsSerializer(school_set, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
 
     def post(self, request):
         # TODO: Pass string through Jaimyn's thing
@@ -34,4 +36,4 @@ class SchoolLocationsView(APIView):
         input_serializer.is_valid(raise_exception=True)
         school_set = schools_within_bounds(input_serializer.validated_data)
         serializer = SchoolLocationsSerializer(school_set, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, headers={"Access-Control-Allow-Origin": '*'})
