@@ -2,7 +2,19 @@ from django.core.exceptions import ValidationError
 
 from rest_framework import serializers
 
+from app.gmaps import query_place
 from app.models import School
+
+
+def load_long_lat():
+    queryset = School.objects.all()
+
+    for query in queryset:
+        ret = query_place(query.postcode)
+        ret.pop('postal')
+        serializer = SchoolLocationsSerializer(instance=query, data=ret, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
 
 class SchoolLocationsSerializer(serializers.ModelSerializer):
