@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer
 
+from app.gmaps import query_place
 
 class SchoolLocationsView(APIView):
     def get(self, request):
@@ -12,8 +13,7 @@ class SchoolLocationsView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        input_serializer = BoundsSerializer(data=request.data)
-        if input_serializer.is_valid(raise_exception=True):
-            school_set = schools_within_bounds(input_serializer.validated_data)
-            serializer = SchoolLocationsSerializer(school_set, many=True)
-            return Response(serializer.data)
+        # todo: pass through jaimyn's wit.ai thingy
+
+        # for now assume its a location
+        return Response(data=query_place(request.data['location']))
