@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
-from app.models import School
+from app.models import School, SubjectEnrollment, Attendence, Naplan, \
+    SecondLanguage, Disciplinary
 
 
 class SchoolLocationsSerializer(serializers.ModelSerializer):
@@ -29,6 +30,16 @@ class BoundsSerializer(serializers.Serializer):
         return attrs
 
 
+class SchoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = School
+
+
+class SubjectEnrollmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubjectEnrollment
+
+
 class SchoolInputSerializer(serializers.Serializer):
     school = serializers.SlugRelatedField(
         slug_field='id',
@@ -36,6 +47,6 @@ class SchoolInputSerializer(serializers.Serializer):
     )
 
 
-class SchoolSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = School
+class SchoolDetailSerializer(serializers.Serializer):
+    school = SchoolSerializer()
+    subject_enrollment_set = SubjectEnrollmentSerializer(many=True)
