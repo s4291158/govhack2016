@@ -127,8 +127,9 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-if not envar.DEV:
+if envar.DEV:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
+else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
