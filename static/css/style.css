@@ -64,3 +64,8 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.input-group-btn:last-child>.btn {
+  height:140%;
+}
+}
