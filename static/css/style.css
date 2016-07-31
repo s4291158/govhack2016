@@ -67,4 +67,6 @@ body {
 
 #searchButton {
   height:140%;
+  padding-top: 9px;
+  padding-bottom: 9px;
 }
