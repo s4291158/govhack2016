@@ -74,6 +74,7 @@ body {
 #schoolResultsTable {
   border: 2px solid rgba(0, 0, 0, 0.25);
   width: 95%;
+  border-radius: 5px;
 }
 
 td {
@@ -84,6 +85,11 @@ td {
 thead {
   background-color: #FFC107;
   color: white;
+}
+
+hr {
+  margin: 10px;
+  color: gray;
 }
 
 #saveSchoolButton {
