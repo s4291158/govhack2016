@@ -1,5 +1,5 @@
 $(() => {
-  let BASE_URL = 'http://qschools.online';
+  let BASE_URL = 'http://127.0.0.1:8000';
   
   let map;
   let markers = [];
