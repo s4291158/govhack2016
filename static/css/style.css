@@ -87,6 +87,11 @@ thead {
   color: white;
 }
 
+hr {
+  margin: 10px;
+  color: gray;
+}
+
 #saveSchoolButton {
   background-color: #536dfe;
   color: white;
