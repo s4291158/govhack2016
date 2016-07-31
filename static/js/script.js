@@ -93,7 +93,45 @@ $(() => {
               (school) => {
       currentSchool = school;
       $("#info").removeClass("offscreen");
-      $('.wrapper').text(JSON.stringify(school));
+      console.log(school);
+     
+      school.name = school.name
+        .split('_').join(' ')
+        .replace(/( ([a-z]))|(^[a-z])/g, (l) => {
+          return l.toUpperCase();
+        });
+        
+      $("#schoolName").text(school.name);
+
+      if(school.naplan_set.length == 1){
+        $("#schoolResultsLabel").text("NAPLAN results");
+        let subjects = ["grammar", 'numeracy', 'reading', 'spelling', 'writing'];
+        let napscores = [];
+        for(let i in subjects){
+          napscores.push({
+            name: subjects[i].replace(/^([a-z])/, (l) => { return l.toUpperCase(); }),
+            yr5: school.naplan_set[0]['year5_' + subjects[i] + 'mean'],
+            yr9: school.naplan_set[0]['year9_' + subjects[i] + 'mean']
+          })
+        }
+
+        let $naplanTable = $("#schoolResultsTable");
+        $naplanTable.append("\
+        <thead><tr>\
+          <td>Subject</td>\
+          <td>Year 5 Score</td>\
+          <td>Year 9 Score</td>\
+        </tr></thead>")
+        $tbody = $('<tbody></tbody>');
+        for(let i in napscores){
+          $row = $("<tr></tr>")
+            .append("<td>" + napscores[i].name + "</td>")
+            .append("<td>" + napscores[i].yr5 + '</td>')
+            .append("<td>" + napscores[i].yr9 + '</td>')
+          $tbody.append($row);
+        }
+        $naplanTable.append($tbody);
+      }
     })
   }
 });

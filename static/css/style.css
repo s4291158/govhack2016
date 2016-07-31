@@ -60,13 +60,14 @@ body {
   cursor: pointer;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
 #searchButton {
   height:140%;
   padding-top: 9px;
   padding-bottom: 9px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
 }
