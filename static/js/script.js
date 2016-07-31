@@ -180,6 +180,11 @@ $(() => {
       } else {
         $('#attendenceChart').text('No attendence data available');
       }
+
+      $("#schoolLanguages").html('');
+      school.secondlanguage_set.forEach(function(p) {
+        $("#schoolLanguages").append("<li>" + p.second_language + "</li>")
+      }, this);
     });
   }
 });
