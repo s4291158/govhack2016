@@ -52,7 +52,7 @@ body {
   position: absolute;
   box-shadow: 3px 2px 1px rgba(0, 0, 0, 0.25);
   right: 0;
-  transition: all 1s;
+  transition: all 0.4s;
 }
 
 #info.offscreen {
@@ -62,12 +62,39 @@ body {
 
 #searchButton {
   height:140%;
-  padding-top: 9px;
-  padding-bottom: 9px;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
+  height: 100%;
+}
+
+#schoolResultsTable {
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  width: 95%;
+}
+
+td {
+  padding: 5px;
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+thead {
+  background-color: #FFC107;
+  color: white;
+}
+
+#saveSchoolButton {
+  background-color: #536dfe;
+  color: white;
+  text-align: center;
+  align-items: flex-end;
+  width: 95%;
+  padding: 5px;
+  margin-top: 10px;
+  font-size: 12px;
+  box-shadow: 3px 2px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
 }
