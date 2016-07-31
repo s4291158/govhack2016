@@ -53,6 +53,7 @@ body {
   box-shadow: 3px 2px 1px rgba(0, 0, 0, 0.25);
   right: 0;
   transition: all 0.4s;
+  overflow-y: scroll;
 }
 
 #info.offscreen {
@@ -68,7 +69,6 @@ body {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  height: 100%;
 }
 
 #schoolResultsTable {
