@@ -16,7 +16,7 @@
 
   <body>
     <nav class="navbar navbar-default">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
             <span class="icon-bar"></span>
@@ -30,7 +30,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">View Wishlist</a></li>
+            <li><a href="#">View Watchlist</a></li>
             <li><a href="#">Compare Schools</a></li>
           </ul>
 
@@ -52,7 +52,16 @@
       <div id="map"></div>
       <div id="info" class="offscreen">
         <div class="wrapper">
+          <h4 id="schoolName"></h1>
+          <div id="schoolType"></div>
           
+          <label id="schoolResultsLabel"></label>
+          <table id="schoolResultsTable"></table>
+
+          <button type="button" id="saveSchoolButton">
+            Save to Wishlist
+            <i class="fa fa-square-o"></i>
+          </button>
         </div>
       </div>
     </div>

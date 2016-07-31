@@ -19,6 +19,12 @@ $(() => {
   });
   
   function generateMarkers(data) {
+    let generateClickListener = (marker, id) => {
+      marker.addListener('click', (e) => {
+        openInfoWindow(id);
+      })
+    };
+
     for(let i in data){
       let marker = new google.maps.Marker({
         position: {
@@ -28,9 +34,7 @@ $(() => {
         map: map,
         title: ("" + data[i].name)
       });
-      marker.addListener('click', (e) => {
-        openInfoWindow(data[i].id);
-      })
+      generateClickListener(marker, data[i].id);
       markers.push(marker);
     }
   }
@@ -43,7 +47,7 @@ $(() => {
     }).catch((err) => { console.log("Error: ", err); });
   
   // save for comparison button click handler
-  $("#saveSchool").click((e) => {
+  $("#saveSchoolButton").click((e) => {
     // if school already on list
     let indxOf = savedSchools.indexOf(currentSchool);
     if(indxOf != -1){
@@ -51,18 +55,14 @@ $(() => {
       savedSchools.splice(indxOf, 1);
       
       // update graphics
-      $(e.currentTarget).find('i').addClass('fa-check-square-o').removeClass('fa-square-o');
+      $(e.currentTarget).find('i').addClass('fa-square-o').removeClass('fa-check-square-o');
     } else {
       // update graphics
-      $(e.currentTarget).find('i').addClass('fa-square-o').removeClass('fa-check-square-o');
+      $(e.currentTarget).find('i').addClass('fa-check-square-o').removeClass('fa-square-o');
 
       // update data
       savedSchools.push(currentSchool);
     }
-  });
-  
-  $("#info").click((e) => {
-    $("#info").toggleClass("offscreen");
   });
   
   function clearAllMarkers() {
@@ -103,24 +103,34 @@ $(() => {
         
       $("#schoolName").text(school.name);
 
-      if(school.naplan_set.length == 1){
+      if(school.naplan_set.length != 0){
         $("#schoolResultsLabel").text("NAPLAN results");
         let subjects = ["grammar", 'numeracy', 'reading', 'spelling', 'writing'];
         let napscores = [];
         for(let i in subjects){
-          napscores.push({
+          let napscore = {
             name: subjects[i].replace(/^([a-z])/, (l) => { return l.toUpperCase(); }),
             yr5: school.naplan_set[0]['year5_' + subjects[i] + 'mean'],
             yr9: school.naplan_set[0]['year9_' + subjects[i] + 'mean']
-          })
+          };
+          if(napscore.yr5 == 0){
+            napscore.yr5 = 'N/A';
+            $("#schoolType").text("High School");
+          } 
+          if(napscore.yr9 == 0){
+            napscore.yr9 = 'N/A';
+            $("#schoolType").text("Primary School");
+          }
+          napscores.push(napscore);
         }
 
         let $naplanTable = $("#schoolResultsTable");
+        $naplanTable.html(""); // clear the table
         $naplanTable.append("\
         <thead><tr>\
           <td>Subject</td>\
-          <td>Year 5 Score</td>\
-          <td>Year 9 Score</td>\
+          <td>Year 5 Result</td>\
+          <td>Year 9 Result</td>\
         </tr></thead>")
         $tbody = $('<tbody></tbody>');
         for(let i in napscores){
@@ -131,6 +141,14 @@ $(() => {
           $tbody.append($row);
         }
         $naplanTable.append($tbody);
+
+        console.log(savedSchools);
+
+        if(savedSchools.indexOf(school) != -1){
+          $("#saveSchoolButton").find('i').addClass('fa-check-square-o').removeClass('fa-square-o');
+        } else {
+          $("#saveSchoolButton").find('i').addClass('fa-square-o').removeClass('fa-check-square-o');
+        }
       }
     })
   }
