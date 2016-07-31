@@ -89,7 +89,7 @@ class MainView(APIView):
         if 'area' in keywords:
             temp_school_id = []
 
-            abv_avg = 600
+            abv_avg = 500
             for i in valid_school_ids:
                 current_school = School.objects.get(id=i)
 
