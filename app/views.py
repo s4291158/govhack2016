@@ -12,8 +12,12 @@ from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
     SchoolInputSerializer, SchoolSerializer
 
+import time
+
+
 class MainView(APIView):
     def post(self, request):
+        time_start = time.time()
         # Filter by location
         # location = query_place(location)
         # lat1 = lat - 0.05
@@ -29,8 +33,7 @@ class MainView(APIView):
 
         keywords = get_the_query(query_data)
 
-        queryset = School.objects.all()
-
+        print(keywords)
 
         valid_school_ids = [s.id for s in School.objects.all()]
 
@@ -133,7 +136,7 @@ class MainView(APIView):
                     cases += 1
 
                 if cases > 0:
-                    average_case = incidents/cases
+                    average_case = incidents / cases
 
                     if average_case > 15:
                         continue
@@ -144,6 +147,9 @@ class MainView(APIView):
 
         queryset = School.objects.filter(id__in=valid_school_ids)
         serializer = SchoolLocationsSerializer(queryset, many=True)
+
+        time_taken = time.time() - time_start
+        print(time_taken)
         return Response(data=serializer.data)  # , headers={"Access-Control-Allow-Origin": '*'})
 
     def get(self, request):
@@ -155,6 +161,7 @@ class SchoolLocationsView(APIView):
         school_set = School.objects.all()
         serializer = SchoolLocationsSerializer(school_set, many=True)
         return Response(data=serializer.data, headers={"Access-Control-Allow-Origin": '*'})
+
 
 class SchoolView(APIView):
     def get(self, request, school_id):
