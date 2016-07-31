@@ -212,9 +212,43 @@ def load_long_lat():
             serializer.save()
 
 
+# minlng, maxlng, minlat, maxlat
+def load_suburbs():
+    with open('./data/suburbs.csv', 'r') as f:
+        for line in csv.reader(f):
+            suburb = line[0].lower()
+
+            min_lng = line[1].lower()
+            max_lng = line[2].lower()
+
+            min_lat = line[3].lower()
+            max_lat = line[4].lower()
+
+            try:
+                Suburbs.objects.get_or_create(
+                    name=suburb,
+                    min_lat=min_lat,
+                    max_lat=max_lat,
+                    min_lng=min_lng,
+                    max_lng=max_lng
+                )
+                print('Created: {}'.format(suburb))
+
+            except Exception as e:
+                print(e)
+
+    # Create additional CSV
+    json_data = open(file_directory).read()
+
+    data = json.loads(json_data)
+    pprint(data)
+
+
+
 def load_all(short=False):
     load_subject_enrollment(short)
     load_attendence(short)
     load_naplan(short)
     load_second_language(short)
     load_disciplinary(short)
+    load_suburbs()

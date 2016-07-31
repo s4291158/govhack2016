@@ -1,6 +1,19 @@
 from django.db import models
 
 
+class Suburbs(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+
+    min_lat = models.FloatField(null=True, blank=True)
+    min_lng = models.FloatField(null=True, blank=True)
+
+    max_lat = models.FloatField(null=True, blank=True)
+    max_lng = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class School(models.Model):
     name = models.CharField(max_length=40, unique=True)
     postcode = models.IntegerField()
@@ -80,4 +93,3 @@ def schools_within_bounds(coords):
         models.Q(lng__lte=coords['lng2'])
     )
     return School.objects.filter(q)
-

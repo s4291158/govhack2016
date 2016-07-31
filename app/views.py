@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.gmaps import query_place
-from app.models import School, schools_within_bounds
+from app.models import School, schools_within_bounds, Suburbs
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
     SchoolInputSerializer, SchoolSerializer
 from app.witty import get_the_query
@@ -36,22 +36,35 @@ class MainView(APIView):
 
         if 'location' in keywords:
             # Filter by location
+            """
             lat_lng, lat_lng_bounds = query_place(keywords['location'])
             formatted_bounds = {'lng1': lat_lng_bounds['southwest']['lng'] - 0.01,
                                 'lng2': lat_lng_bounds['northeast']['lng'] + 0.01,
                                 'lat1': lat_lng_bounds['southwest']['lat'] - 0.01,
                                 'lat2': lat_lng_bounds['northeast']['lat'] + 0.01}
+            """
+            suburb = Suburbs.objects.filter(name__contains=keywords['location'])
 
-            bounds_serializer = BoundsSerializer(data=formatted_bounds)
-            bounds_serializer.is_valid(raise_exception=True)
+            if len(suburb) > 0:
+                suburb = suburb[0]
 
-            queryset = schools_within_bounds(bounds_serializer.validated_data)
+                print(suburb)
 
-            temp_school_id = []
-            for q in queryset:
-                temp_school_id.append(q.id)
+                formatted_bounds = {'lng1': suburb.min_lng - 0.01,
+                                    'lng2': suburb.max_lng + 0.01,
+                                    'lat1': suburb.min_lat - 0.01,
+                                    'lat2': suburb.max_lng + 0.01}
 
-            valid_school_ids = temp_school_id
+                bounds_serializer = BoundsSerializer(data=formatted_bounds)
+                bounds_serializer.is_valid(raise_exception=True)
+
+                queryset = schools_within_bounds(bounds_serializer.validated_data)
+
+                temp_school_id = []
+                for q in queryset:
+                    temp_school_id.append(q.id)
+
+                valid_school_ids = temp_school_id
 
         if 'attendance' in keywords:
             # filter attendence
