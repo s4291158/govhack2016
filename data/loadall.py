@@ -218,4 +218,3 @@ def load_all(short=False):
     load_naplan(short)
     load_second_language(short)
     load_disciplinary(short)
-    load_long_lat()

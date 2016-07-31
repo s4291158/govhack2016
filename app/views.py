@@ -31,6 +31,7 @@ class MainView(APIView):
 
         queryset = School.objects.all()
 
+
         valid_school_ids = [s.id for s in School.objects.all()]
 
         if type(keywords) is str:
@@ -86,10 +87,9 @@ class MainView(APIView):
             valid_school_ids = temp_school_id
 
         if 'area' in keywords:
-
             temp_school_id = []
 
-            abv_avg = 600
+            abv_avg = 500
             for i in valid_school_ids:
                 current_school = School.objects.get(id=i)
 
@@ -114,6 +114,31 @@ class MainView(APIView):
                     elif 'gram' in keywords['area']:
                         if current_naplan.year9_grammarmean >= abv_avg or current_naplan.year5_grammarmean >= abv_avg:
                             temp_school_id.append(i)
+
+            valid_school_ids = temp_school_id
+
+        if 'suspension' in keywords:
+
+            temp_school_id = []
+
+            total_average = 0
+
+            for i in valid_school_ids:
+                current_school = School.objects.get(id=i)
+
+                incidents = 0
+                cases = 0
+                for current_disciplinary in current_school.disciplinary_set.all():
+                    incidents += current_disciplinary.num_of_incident
+                    cases += 1
+
+                if cases > 0:
+                    average_case = incidents/cases
+
+                    if average_case > 15:
+                        continue
+
+                temp_school_id.append(i)
 
             valid_school_ids = temp_school_id
 
