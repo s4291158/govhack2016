@@ -64,11 +64,11 @@ def load_attendence(short=False):
 
         for line in csv.reader(f):
 
-            school = line[0].lower().split(' ')
+            school = line[0].lower().replace(' ', '_').replace('&', 'and')
             year = line[2]
             attendence = line[10].replace('%', '')
 
-            _school = School.objects.filter(name__contains=school[0])
+            _school = School.objects.filter(name__icontains=school)
 
             if len(_school) <= 0:
                 continue
@@ -94,7 +94,7 @@ def load_naplan(short=False):
             break
 
         for line in csv.reader(f):
-            school = line[1].lower().split(' ')
+            school = line[1].lower().replace(' ', '_').replace('&', 'and')
 
             year5_readingmean = line[12].replace('--', '0').replace('*', '0')
             year5_writingmean = line[13].replace('--', '0').replace('*', '0')
@@ -108,7 +108,7 @@ def load_naplan(short=False):
             year9_grammarmean = line[25].replace('--', '0').replace('*', '0')
             year9_numeracymean = line[26].replace('--', '0').replace('*', '0')
 
-            _school = School.objects.filter(name__contains=school[0])
+            _school = School.objects.filter(name__icontains=school)
 
             if len(_school) <= 0:
                 continue
@@ -145,10 +145,10 @@ def load_second_language(short=False):
 
         for line in csv.reader(f):
 
-            school = line[0].lower().split()
+            school = line[0].lower().replace(' ', '_').replace('&', 'and')
             second_language = line[4]
 
-            _school = School.objects.filter(name__contains=school[0])
+            _school = School.objects.filter(name__icontains=school)
 
             if len(_school) <= 0:
                 continue
@@ -174,12 +174,12 @@ def load_disciplinary(short=False):
             break
 
         for line in csv.reader(f):
-            school = line[1].lower().split(' ')
+            school = line[1].lower().replace(' ', '_').replace('&', 'and')
 
             suspension_type = line[9]
             num_of_incident = line[10]
 
-            _school = School.objects.filter(name__contains=school[0])
+            _school = School.objects.filter(name__icontains=school)
 
             if len(_school) <= 0:
                 continue
