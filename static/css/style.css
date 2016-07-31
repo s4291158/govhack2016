@@ -74,6 +74,7 @@ body {
 #schoolResultsTable {
   border: 2px solid rgba(0, 0, 0, 0.25);
   width: 95%;
+  border-radius: 5px;
 }
 
 td {

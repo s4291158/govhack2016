@@ -142,6 +142,8 @@ $(() => {
         }
         $naplanTable.append($tbody);
 
+        console.log(savedSchools);
+
         if(savedSchools.indexOf(school) != -1){
           $("#saveSchoolButton").find('i').addClass('fa-check-square-o').removeClass('fa-square-o');
         } else {
