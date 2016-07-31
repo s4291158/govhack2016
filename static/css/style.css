@@ -66,9 +66,8 @@ body {
 }
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
   margin-left: 20px;
+  height: 100%;
 }
 
 #schoolResultsTable {
@@ -96,7 +95,6 @@ hr {
   background-color: #536dfe;
   color: white;
   text-align: center;
-  align-items: flex-end;
   width: 95%;
   padding: 5px;
   margin-top: 10px;
