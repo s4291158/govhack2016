@@ -153,6 +153,26 @@ $(() => {
           $("#saveSchoolButton").find('i').addClass('fa-square-o').removeClass('fa-check-square-o');
         }
       }
-    })
+
+      // ATTENDANCES
+      let attendenceLabels = school.attendence_set.map((p) => {
+        return '' + p.year;
+      });
+      let attendenceRates = school.attendence_set.map((p) => {
+        return p.attendence_rate;
+      });
+      var ctx = $('#attendenceChart');
+      var attendenceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: attendenceLabels,
+          datasets: [{
+            label: school.name + " Attendence Rates",
+            data: attendenceRates,
+            backgroundColor: '#4caf50'
+          }]
+        }
+      });
+    });
   }
 });

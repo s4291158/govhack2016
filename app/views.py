@@ -1,16 +1,13 @@
-from django.views.decorators.csrf import csrf_exempt
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-from app.witty import get_the_query
-from app.gmaps import query_place
-
 from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from app.gmaps import query_place
 from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
     SchoolInputSerializer, SchoolSerializer
+from app.witty import get_the_query
+
 
 import time
 
@@ -70,7 +67,7 @@ class MainView(APIView):
 
                 if 'good' in keywords['attendance']:
                     # If they want good and this school aint good enough, pop
-                    if len(current_naplan.attendence_set.all().filter(attendence_rate__gte=90.0)) <= 0:
+                    if len(current_naplan.attendence_set.all().filter(attendence_rate__gte=85.0)) <= 0:
                         temp_school_id.append(i)
 
                 elif 'high' in keywords['attendance']:
@@ -142,6 +139,18 @@ class MainView(APIView):
                         continue
 
                 temp_school_id.append(i)
+
+            valid_school_ids = temp_school_id
+
+        if 'language' in keywords:
+            language__ = keywords['language']
+
+            temp_school_id = []
+            for i in valid_school_ids:
+                current_school = School.objects.get(id=i)
+
+                if current_school.secondlanguage_set.all().filter(second_language__contains=language__.lower()):
+                    temp_school_id.append(i)
 
             valid_school_ids = temp_school_id
 

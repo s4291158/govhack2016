@@ -4,6 +4,7 @@
     <title>Qschools</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>window.initMap = function(){}</script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js'></script>
     <script type='text/javascript' src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
     <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3F23U8fVjGBEwcZ_xBlrg-kCxIu_cqAU&amp;callback=window.initMap"></script>
@@ -54,12 +55,21 @@
         <div class="wrapper">
           <h4 id="schoolName"></h1>
           <div id="schoolType"></div>
-          
+
+          <hr/>
+
           <label id="schoolResultsLabel"></label>
           <table id="schoolResultsTable"></table>
 
+          <hr/>
+
+          <label>Attendance Rate</label>
+          <canvas id="attendenceChart"></canvas>
+
+          <hr/>
+          
           <button type="button" id="saveSchoolButton">
-            Save to Wishlist
+            ADD TO WATCHLIST&nbsp;
             <i class="fa fa-square-o"></i>
           </button>
         </div>
