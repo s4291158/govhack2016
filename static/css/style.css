@@ -65,7 +65,6 @@ body {
   flex-direction: column;
 }
 
-.input-group-btn:last-child>.btn {
+#searchButton {
   height:140%;
-}
 }
