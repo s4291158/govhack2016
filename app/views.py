@@ -1,19 +1,20 @@
-from django.views.decorators.csrf import csrf_exempt
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-from app.witty import get_the_query
-from app.gmaps import query_place
-
 from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from app.gmaps import query_place
 from app.models import School, schools_within_bounds
 from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
     SchoolInputSerializer, SchoolSerializer
+from app.witty import get_the_query
+
+
+import time
+
 
 class MainView(APIView):
     def post(self, request):
+        time_start = time.time()
         # Filter by location
         # location = query_place(location)
         # lat1 = lat - 0.05
@@ -29,8 +30,7 @@ class MainView(APIView):
 
         keywords = get_the_query(query_data)
 
-        queryset = School.objects.all()
-
+        print(keywords)
 
         valid_school_ids = [s.id for s in School.objects.all()]
 
@@ -67,7 +67,7 @@ class MainView(APIView):
 
                 if 'good' in keywords['attendance']:
                     # If they want good and this school aint good enough, pop
-                    if len(current_naplan.attendence_set.all().filter(attendence_rate__gte=90.0)) <= 0:
+                    if len(current_naplan.attendence_set.all().filter(attendence_rate__gte=85.0)) <= 0:
                         temp_school_id.append(i)
 
                 elif 'high' in keywords['attendance']:
@@ -133,7 +133,7 @@ class MainView(APIView):
                     cases += 1
 
                 if cases > 0:
-                    average_case = incidents/cases
+                    average_case = incidents / cases
 
                     if average_case > 15:
                         continue
@@ -142,8 +142,23 @@ class MainView(APIView):
 
             valid_school_ids = temp_school_id
 
+        if 'language' in keywords:
+            language__ = keywords['language']
+
+            temp_school_id = []
+            for i in valid_school_ids:
+                current_school = School.objects.get(id=i)
+
+                if current_school.secondlanguage_set.all().filter(second_language__contains=language__.lower()):
+                    temp_school_id.append(i)
+
+            valid_school_ids = temp_school_id
+
         queryset = School.objects.filter(id__in=valid_school_ids)
         serializer = SchoolLocationsSerializer(queryset, many=True)
+
+        time_taken = time.time() - time_start
+        print(time_taken)
         return Response(data=serializer.data)  # , headers={"Access-Control-Allow-Origin": '*'})
 
     def get(self, request):
@@ -155,6 +170,7 @@ class SchoolLocationsView(APIView):
         school_set = School.objects.all()
         serializer = SchoolLocationsSerializer(school_set, many=True)
         return Response(data=serializer.data, headers={"Access-Control-Allow-Origin": '*'})
+
 
 class SchoolView(APIView):
     def get(self, request, school_id):
