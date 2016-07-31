@@ -26,11 +26,16 @@ class MainView(APIView):
 
         # {'school': 'school', 'location': 'brisbane city', 'area': 'numeracy', 'attendance': 'good', 'suspension': 'short'}
         query_data = request.data['query']
+
         keywords = get_the_query(query_data)
 
         queryset = School.objects.all()
 
         valid_school_ids = [s.id for s in School.objects.all()]
+
+        if type(keywords) is str:
+            keywords = {}
+            keywords['location'] = request.data['query']
 
         if 'location' in keywords:
             # Filter by location
@@ -57,32 +62,60 @@ class MainView(APIView):
             temp_school_id = []
 
             for i in valid_school_ids:
-                current_school = School.objects.get(id=i)
+                current_naplan = School.objects.get(id=i)
 
                 if 'good' in keywords['attendance']:
                     # If they want good and this school aint good enough, pop
-                    if len(current_school.attendence_set.all().filter(attendence_rate__gte=90.0)) <= 0:
+                    if len(current_naplan.attendence_set.all().filter(attendence_rate__gte=90.0)) <= 0:
                         temp_school_id.append(i)
 
                 elif 'high' in keywords['attendance']:
-                    if len(current_school.attendence_set.all().filter(attendence_rate__gte=95.0)) <= 0:
+                    if len(current_naplan.attendence_set.all().filter(attendence_rate__gte=95.0)) <= 0:
                         temp_school_id.append(i)
 
                 # Assume
                 elif 'bad' in keywords['attendance']:
-                    if len(current_school.attendence_set.all().filter(attendence_rate__lte=85.0)) <= 0:
+                    if len(current_naplan.attendence_set.all().filter(attendence_rate__lte=85.0)) <= 0:
                         temp_school_id.append(i)
 
                 # Assume average
                 else:
-                    if len(current_school.attendence_set.all().filter(attendence_rate__lte=100.0)) <= 0:
+                    if len(current_naplan.attendence_set.all().filter(attendence_rate__lte=100.0)) <= 0:
                         temp_school_id.append(i)
 
             valid_school_ids = temp_school_id
 
         if 'area' in keywords:
-            print('reached')
-            print(keywords['area'])
+
+            temp_school_id = []
+
+            abv_avg = 600
+            for i in valid_school_ids:
+                current_school = School.objects.get(id=i)
+
+                for current_naplan in current_school.naplan_set.all():
+
+                    if 'numeracy' in keywords['area']:
+                        if current_naplan.year9_numeracymean >= abv_avg or current_naplan.year5_numeracymean >= abv_avg:
+                            temp_school_id.append(i)
+
+                    elif 'read' in keywords['area']:
+                        if current_naplan.year9_readingmean >= abv_avg or current_naplan.year5_readingmean >= abv_avg:
+                            temp_school_id.append(i)
+
+                    elif 'writ' in keywords['area']:
+                        if current_naplan.year5_writingmean >= abv_avg or current_naplan.year5_writingmean >= abv_avg:
+                            temp_school_id.append(i)
+
+                    elif 'spell' in keywords['area']:
+                        if current_naplan.year9_spellingmean >= abv_avg or current_naplan.year5_spellingmean >= abv_avg:
+                            temp_school_id.append(i)
+
+                    elif 'gram' in keywords['area']:
+                        if current_naplan.year9_grammarmean >= abv_avg or current_naplan.year5_grammarmean >= abv_avg:
+                            temp_school_id.append(i)
+
+            valid_school_ids = temp_school_id
 
         queryset = School.objects.filter(id__in=valid_school_ids)
         serializer = SchoolLocationsSerializer(queryset, many=True)
