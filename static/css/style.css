@@ -1,8 +1,3 @@
-body {
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
 .navbar {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -46,7 +41,6 @@ body {
 
 #info {
   width: 45%;
-  height: calc(100vh - 60px);
   background: white;
   display: block;
   position: absolute;
@@ -67,7 +61,6 @@ body {
 
 .wrapper {
   margin-left: 20px;
-  height: 100%;
 }
 
 #schoolResultsTable {
