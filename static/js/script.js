@@ -155,24 +155,31 @@ $(() => {
       }
 
       // ATTENDANCES
-      let attendenceLabels = school.attendence_set.map((p) => {
-        return '' + p.year;
-      });
-      let attendenceRates = school.attendence_set.map((p) => {
-        return p.attendence_rate;
-      });
-      var ctx = $('#attendenceChart');
-      var attendenceChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: attendenceLabels,
-          datasets: [{
-            label: school.name + " Attendence Rates",
-            data: attendenceRates,
-            backgroundColor: '#4caf50'
-          }]
-        }
-      });
+      if(attendenceChart.clear){
+        $('#attendenceChart').html('<canvas></canvas>'); // make new canvas
+      }
+
+      if(school.attendence_set.length > 0){
+        let attendenceLabels = school.attendence_set.map((p) => {
+          return '' + p.year;
+        });
+        let attendenceRates = school.attendence_set.map((p) => {
+          return p.attendence_rate;
+        });
+        attendenceChart = new Chart($('#attendenceChart').find('canvas'), {
+          type: 'bar',
+          data: {
+            labels: attendenceLabels,
+            datasets: [{
+              label: school.name + " Attendence Rates",
+              data: attendenceRates,
+              backgroundColor: '#4caf50'
+            }]
+          }
+        });
+      } else {
+        $('#attendenceChart').text('No attendence data available');
+      }
     });
   }
 });

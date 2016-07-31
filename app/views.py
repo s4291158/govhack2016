@@ -9,8 +9,12 @@ from app.serializers import SchoolLocationsSerializer, BoundsSerializer, \
 from app.witty import get_the_query
 
 
+import time
+
+
 class MainView(APIView):
     def post(self, request):
+        time_start = time.time()
         # Filter by location
         # location = query_place(location)
         # lat1 = lat - 0.05
@@ -26,7 +30,7 @@ class MainView(APIView):
 
         keywords = get_the_query(query_data)
 
-        queryset = School.objects.all()
+        print(keywords)
 
         valid_school_ids = [s.id for s in School.objects.all()]
 
@@ -165,6 +169,9 @@ class MainView(APIView):
 
         queryset = School.objects.filter(id__in=valid_school_ids)
         serializer = SchoolLocationsSerializer(queryset, many=True)
+
+        time_taken = time.time() - time_start
+        print(time_taken)
         return Response(data=serializer.data)  # , headers={"Access-Control-Allow-Origin": '*'})
 
     def get(self, request):
