@@ -32,7 +32,10 @@ $(() => {
           lng: data[i].lng
         },
         map: map,
-        title: ("" + data[i].name)
+        title: ("" + data[i].name).split('_').join(' ')
+          .replace(/( ([a-z]))|(^[a-z])/g, (l) => {
+            return l.toUpperCase();
+          })
       });
       generateClickListener(marker, data[i].id);
       markers.push(marker);
