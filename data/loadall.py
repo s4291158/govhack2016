@@ -1,4 +1,5 @@
 import csv
+import json, pprint
 import time
 
 from app.gmaps import query_place
@@ -213,35 +214,49 @@ def load_long_lat():
 
 
 # minlng, maxlng, minlat, maxlat
-def load_suburbs():
-    with open('./data/suburbs.csv', 'r') as f:
-        for line in csv.reader(f):
-            suburb = line[0].lower()
+def load_suburbs(short=False):
+    # Create additional CSV
+    json_data = open('./data/4cities.json').read()
 
-            min_lng = line[1].lower()
-            max_lng = line[2].lower()
+    my_dict = json.loads(json_data)
 
-            min_lat = line[3].lower()
-            max_lat = line[4].lower()
-
+    for i in my_dict:
+        for key in i:
             try:
                 Suburbs.objects.get_or_create(
-                    name=suburb,
-                    min_lat=min_lat,
-                    max_lat=max_lat,
-                    min_lng=min_lng,
-                    max_lng=max_lng
+                    name=key,
+                    min_lng=i[key]['northeast']['lng'],
+                    min_lat=i[key]['northeast']['lat'],
+                    max_lng=i[key]['southwest']['lng'],
+                    max_lat=i[key]['southwest']['lat']
                 )
-                print('Created: {}'.format(suburb))
-
+                print('[!] Created: {}'.format(key))
             except Exception as e:
                 print(e)
 
-    # Create additional CSV
-    json_data = open(file_directory).read()
+    if not short:
+        with open('./data/suburbs.csv', 'r') as f:
+            for line in csv.reader(f):
+                suburb = line[0].lower()
 
-    data = json.loads(json_data)
-    pprint(data)
+                min_lng = line[1].lower()
+                max_lng = line[2].lower()
+
+                min_lat = line[3].lower()
+                max_lat = line[4].lower()
+
+                try:
+                    Suburbs.objects.get_or_create(
+                        name=suburb,
+                        min_lat=min_lat,
+                        max_lat=max_lat,
+                        min_lng=min_lng,
+                        max_lng=max_lng
+                    )
+                    print('Created: {}'.format(suburb))
+
+                except Exception as e:
+                    print(e)
 
 
 
@@ -251,4 +266,4 @@ def load_all(short=False):
     load_naplan(short)
     load_second_language(short)
     load_disciplinary(short)
-    load_suburbs()
+    load_suburbs(short)
