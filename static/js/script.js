@@ -1,95 +1,62 @@
+// when document is ready
 $(() => {
-  let BASE_URL = 'http://qschools.online';
-  
-  let map;
-  let markers = [];
-  let savedSchools = [];
-  let currentSchool = 0;
-  
-  let locationsRecieved = $.getJSON(BASE_URL + '/school_locations/?format=json');
-  let mapInitialized = new Promise((resolve, reject) => {
-    window.initMap = function() {
-      let mapDiv = $('#map')[0];
-      map = new google.maps.Map(mapDiv, {
-        center: {lat: -27.4698, lng: 153.0251},
-        zoom: 8
-      });
-      resolve();
-    }
-  });
-  
-  function generateMarkers(data) {
-    let generateClickListener = (marker, id) => {
-      marker.addListener('click', (e) => {
-        openInfoWindow(id);
-      })
-    };
+  // import modules
+  import {BackendAPI} from 'backendAPI.js';
+  import {GoogleMap} from 'googleMap.js';
+  import {InfoWindow} from 'infoWindow.js';
+  import {Utils} from 'utils.js';
+  import {UserInterface} from 'userInterface.js';
 
-    for(let i in data){
-      let marker = new google.maps.Marker({
-        position: {
-          lat: data[i].lat,
-          lng: data[i].lng
-        },
-        map: map,
-        title: ("" + data[i].name).split('_').join(' ')
-          .replace(/( ([a-z]))|(^[a-z])/g, (l) => {
-            return l.toUpperCase();
-          })
-      });
-      generateClickListener(marker, data[i].id);
-      markers.push(marker);
-    }
-  }
-  
-  // promise to handle all setup
-  Promise
-    .all([locationsRecieved, mapInitialized])
-    .then((data) => {
-      generateMarkers(data[0]);
-    }).catch((err) => { console.log("Error: ", err); });
-  
-  // save for comparison button click handler
-  $("#saveSchoolButton").click((e) => {
-    // if school already on list
-    let indxOf = savedSchools.indexOf(currentSchool);
-    if(indxOf != -1){
-      // remove it
-      savedSchools.splice(indxOf, 1);
-      
-      // update graphics
-      $(e.currentTarget).find('i').addClass('fa-square-o').removeClass('fa-check-square-o');
-    } else {
-      // update graphics
-      $(e.currentTarget).find('i').addClass('fa-check-square-o').removeClass('fa-square-o');
+  // configuration
+  const BACKEND_CONFIG = {
+    base_url: 'http://qschools.online',
+    school_locations_endpoint: '/school_locations/?format=json',
+    school_info_endpoint: '/school/'
+  };
 
-      // update data
-      savedSchools.push(currentSchool);
+  const MAP_CONFIG = {
+    mapDivID: "map",
+    mapOpts: {
+      center: {
+        lat: -27.4698,
+        lng: 153.0251
+      },
+      zoom: 12
     }
-  });
-  
-  function clearAllMarkers() {
-    for(let i in markers){
-      markers[i].setMap(null);
-    }
-    markers = [];
-  }
-  
-  function handleSearch() {
-    let query = $("#srch-term").val();
-    console.log(query);
-    $.post(BASE_URL, {"query": query}, (data) => {
-      console.log(data);
-      clearAllMarkers();
-      generateMarkers(data);
-    });
   };
   
-  $("#srch-term").keyup((e) => {
-    if(e.keyCode == 13)
-      handleSearch;
-  });
-  $("#searchButton").click(handleSearch);
+  // handle back-end comms through this object
+  let backend = new BackendAPI(BACKEND_CONFIG);
+  // handle map functions with this object
+  let map = new GoogleMap(MAP_CONFIG);
+  // handle information shown in the info window
+  let infoWindow = new InfoWindow();
+
+  const UI_IDS = {
+    searchBar: '',
+    watchlistButton: '',
+    compareSchoolsButton: ''
+  };
+  // callbacks for User Interface
+  let UI_CBS = {
+    searchBarInput: backend.handleSearch,
+    watchlistPress: null,
+    compareSchoolsPress: null
+  }
+
+  // user interface
+  let ui = new UserInterface();
+  
+  // promise to get location data and load google map
+  Promise
+    .all([
+      backend.getAllSchoolLocations(),
+      map.loadGoogleMap()
+    ])
+    .then((data) => {
+      let schools = data[0]; // result from first promise
+      map.generateSchoolMarkers(schools);
+    }).catch((err) => { console.log("Error: ", err); });
   
   function openInfoWindow(id) {
     $.getJSON(BASE_URL + '/school/' + id,
