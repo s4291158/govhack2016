@@ -9,7 +9,7 @@ export class GoogleMap {
   // promise to initialize the google map
   loadGoogleMap() {
     return new Promise((resolve, reject) => {
-      let mapDiv = $('#' + this.mapDivID)[0];
+      let mapDiv = $(this.mapDivSel)[0];
       window.initMap = () => {
         this.mapObj = new google.maps.Map(mapDiv, this.mapOpts);
         resolve();

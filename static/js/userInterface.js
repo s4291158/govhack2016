@@ -1,9 +1,9 @@
 export class UserInterface {
-  constructor(ids, cbs) {
+  constructor(sels, cbs) {
     // the $ preceding these objects show that they are jquery objects
-    this.$searchBarInput = $('#' + ids.searchBar);
-    this.$watchlistButton = $('#' + ids.watchlistButton);
-    this.$compareSchoolsButton = $('#' + ids.compareSchoolsButton);
+    this.$searchBarInput = $(sels.searchBar);
+    this.$watchlistButton = $(sels.watchlistButton);
+    this.$compareSchoolsButton = $(sels.compareSchoolsButton);
     this.initUI(
       cbs.searchBarInput, 
       cbs.watchListPress, 

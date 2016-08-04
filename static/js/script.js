@@ -15,7 +15,7 @@ $(() => {
   };
 
   const MAP_CONFIG = {
-    mapDivID: "map",
+    mapDivSel: "#map",
     mapOpts: {
       center: {
         lat: -27.4698,
@@ -24,28 +24,41 @@ $(() => {
       zoom: 12
     }
   };
+
+  const INFO_WINDOW_CONFIG = {
+    infoDivSel: "#info",
+    
+  }
   
   // handle back-end comms through this object
   let backend = new BackendAPI(BACKEND_CONFIG);
+  // handle local browser memory and cookie storage
+  let storage = new Storage();
   // handle map functions with this object
   let map = new GoogleMap(MAP_CONFIG);
   // handle information shown in the info window
-  let infoWindow = new InfoWindow();
+  let infoWindow = new InfoWindow(storage, INFO_WINDOW_CONFIG);
 
-  const UI_IDS = {
+  const UI_SELS = {
     searchBar: '',
     watchlistButton: '',
     compareSchoolsButton: ''
   };
   // callbacks for User Interface
   let UI_CBS = {
-    searchBarInput: backend.handleSearch,
-    watchlistPress: null,
-    compareSchoolsPress: null
+    searchBarInput: (query) => {
+      backend.handleSearch(query)
+        .then((schools) => {
+          map.removeAllMarkers();
+          map.generateSchoolMarkers(schools, infoWindow.openInfoWindow);
+        });
+    },
+    watchlistPress: () => { console.log('opened Watchlist'); },
+    compareSchoolsPress: () => { console.log('opened school compare'); }
   }
 
   // user interface
-  let ui = new UserInterface();
+  let ui = new UserInterface(UI_SELS, UI_CBS);
   
   // promise to get location data and load google map
   Promise
@@ -65,11 +78,7 @@ $(() => {
       $("#info").removeClass("offscreen");
       console.log(school);
      
-      school.name = school.name
-        .split('_').join(' ')
-        .replace(/( ([a-z]))|(^[a-z])/g, (l) => {
-          return l.toUpperCase();
-        });
+      school.name = Utils.nounify(school.name);
         
       $("#schoolName").text(school.name);
 

@@ -10,6 +10,12 @@ export class BackendAPI {
     return $.getJSON(this.base_url + school_locations_endpoint);
   }
 
+  // promise to get all available information from a school to display in a graph
+  getSchoolInfo(id) {
+    return $.getJSON(this.base_url + this.school_info_endpoint + id);
+  }
+
+  // promise to return the results of a query
   handleSearch(query) {
     return $.post(BASE_URL, {"query": query});
   };
